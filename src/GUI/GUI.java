@@ -25,10 +25,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-
-
 public class GUI extends Application{
 	public static int hojaActual;
+	public static int Opcionsuper=0;
 	public void start(Stage primarystage) {
 		
 		
@@ -236,6 +235,22 @@ public class GUI extends Application{
 		Button btnD1=new Button();
 		Button btnJybueno=new Button();
 		Button btnJumbo=new Button();
+		Label[] mensajeopcion = new Label[5];
+		mensajeopcion[0] = new Label("No has escogido ningun supermercado");
+		mensajeopcion[0].setPrefWidth(150);
+		mensajeopcion[0].setWrapText(true);
+		mensajeopcion[1] = new Label("has escogido supermercados EXITO");
+		mensajeopcion[1].setPrefWidth(150);
+		mensajeopcion[1].setWrapText(true);
+		mensajeopcion[2] = new Label("has escogido supermercados D1");
+		mensajeopcion[2].setPrefWidth(150);
+		mensajeopcion[2].setWrapText(true);
+		mensajeopcion[3] = new Label("has escogido supermercados J&B");
+		mensajeopcion[3].setPrefWidth(150);
+		mensajeopcion[3].setWrapText(true);
+		mensajeopcion[4] = new Label("has escogido supermercados JUMBO");
+		mensajeopcion[4].setPrefWidth(150);
+		mensajeopcion[4].setWrapText(true);
 		try {
 			//imagen1
 			Image image1 = new Image(new FileInputStream(System.getProperty("user.dir") + "\\src\\IMAGENES\\cara1.jpg"));
@@ -288,9 +303,9 @@ public class GUI extends Application{
 		Label label2=new Label("Escoga el supermercado");
 		label2.setAlignment(Pos.TOP_CENTER);
 		Button btnback=new Button("Regresar");
-		VBox m2p1=new VBox(label2);
-		m2p1.setBorder(new Border(new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, null , null)));
-		m2p1.setAlignment(Pos.CENTER);
+		BorderPane lbl2wind=new BorderPane();
+		lbl2wind.setTop(label2);
+		lbl2wind.setCenter(mensajeopcion[0]);
 		GridPane btnsuper=new GridPane();
 		btnsuper.add(btnExito, 0, 0);
 		btnsuper.add(btnD1, 1, 0);
@@ -300,10 +315,13 @@ public class GUI extends Application{
 		HBox m2p2=new HBox(10,btnback,m2aceptar);
 		BorderPane main2=new BorderPane();
 		m2p2.setAlignment(Pos.CENTER);
-		main2.setTop(m2p1);
+		main2.setTop(lbl2wind);
 		main2.setCenter(btnsuper);
 		main2.setBottom(m2p2);
-		Scene scene2=new Scene(main2,193,285);
+		Scene scene2=new Scene(main2,193,300);
+		BorderPane main3=new BorderPane();
+		Scene scene3=new Scene(main3,300,300);
+		//INGRESAR
 		bt4.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event){
@@ -317,6 +335,8 @@ public class GUI extends Application{
 		btnback.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event){
+				Opcionsuper=0;
+				lbl2wind.setCenter(mensajeopcion[0]);
 				primarystage.setTitle("prueba1");
 				primarystage.setScene(scene1);
 				primarystage.show();
@@ -324,11 +344,62 @@ public class GUI extends Application{
 
 			}
 		});
+		btnExito.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event){
+				Opcionsuper=1;
+				lbl2wind.setCenter(mensajeopcion[1]);
+			}
+		});
+		btnD1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event){
+				Opcionsuper=2;
+				lbl2wind.setCenter(mensajeopcion[2]);
+			}
+		});
+		btnJybueno.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event){
+				Opcionsuper=3;
+				lbl2wind.setCenter(mensajeopcion[3]);
+			}
+		});
+		btnJumbo.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event){
+				Opcionsuper=4;
+				lbl2wind.setCenter(mensajeopcion[4]);
+			}
+		});
+		m2aceptar.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event){
+				try {
+					if(Opcionsuper!=0) {
+						primarystage.setTitle("prueba3");
+						primarystage.setScene(scene3);
+						primarystage.show();
+				}
+				else {
+						throw new Exception();
+					}
+			} catch (Exception e) {
+				Alert info = new Alert(AlertType.ERROR);
+				info.setHeaderText("Error");
+				info.setTitle("ERROR");
+				info.setContentText("No se ha seleccionado un supermercado");
+				info.show();
+			}
+
+
+			}
+		});
+		
 	}
 	
 
 public static void main(String[] args) {
    launch(args);
 }
-
 }
