@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import BaseDatos.*;
 import java.io.Serializable;
+import gestorAplicacion.exceptions.*;
 public class Supermercado implements Serializable{
 	/**
 	 * 
@@ -67,10 +68,10 @@ public class Supermercado implements Serializable{
 		   Products.add(w);
 	}
 	//FUNCIONALIDAD 2 (IMPLEMENTADA) BUSCA MOSTRAR EL PRODUCTO MAS POPULAR A TRAVES DE CONTEO DE LA CANTIDAD DE VECES QUE EL NOMBRE ES GUARDADO EN LA LISTA ESTADISTICA
-	public String prodMasPopular(){
+	public String prodMasPopular() throws empate {
 		String prodPop="";
 		int mayorveces = 0;
-		boolean empateProdmas=false;
+		boolean empateProdmas=true;
 		for(int i = 0; i < Estadisticas.size(); i++) {
 			int veces=Collections.frequency(Estadisticas, Estadisticas.get(i));
 			if(veces > mayorveces) {
@@ -83,7 +84,7 @@ public class Supermercado implements Serializable{
 			}
 		}
 		if (empateProdmas==true) {
-			return null;
+			throw new empate();
 		}
 		else {
 			return prodPop;
@@ -91,10 +92,10 @@ public class Supermercado implements Serializable{
 		
 	}
 	// BUSCA MOSTRAR EL PRODUCTO MENOS POPULAR A TRAVES DE CONTEO DE LA CANTIDAD DE VECES QUE EL NOMBRE ES GUARDADO EN LA LISTA ESTADISTICA
-	public String prodMenosPopular() {
+	public String prodMenosPopular() throws empate {
 		String prodNoPop="";
 		int menorveces=10000000;
-		boolean empateProdmenos=false;
+		boolean empateProdmenos=true;
 		for(int i = 0; i < Estadisticas.size(); i++) {
 			int vecesmenos=Collections.frequency(Estadisticas, Estadisticas.get(i));
 			if(vecesmenos<menorveces) {
@@ -107,14 +108,14 @@ public class Supermercado implements Serializable{
 			}
 		}
 		if (empateProdmenos==true) {
-			return null;
+			throw new empate();
 		}
 		else {
 			return prodNoPop;
 		}
 	}
 	//5TA FUNCIONALIDAD (IMPLEMENTADA) BUSCA EL MENSAJERO CON MAS FACTURAS EN SU LISTA DE FACTURAS(ESO INDICARIA QUE HA HECHO LA MAYOR CANTIDAD DE ENVIOS)
-	public Mensajero MejorMensajero() {
+	public Mensajero MejorMensajero() throws empate {
 		Mensajero mejorEmpleado=null;
 		int mayor=0;
 		boolean empate=false;
@@ -130,7 +131,7 @@ public class Supermercado implements Serializable{
 			}
 		}
 		if (empate==true) {
-			return null;
+			throw new empate();
 		}
 		else{
 			return mejorEmpleado;
@@ -138,7 +139,7 @@ public class Supermercado implements Serializable{
 
 	}
 	//3ERA FUNCIONALIDAD(IMPLEMENTADA) BUSCA EL MENSAJERO CON EL MAYOR TAMAÑO DE QUEJAS EN SU LISTA DE QUEJAS
-	public Mensajero MensajeroConMasQuejas() {
+	public Mensajero MensajeroConMasQuejas() throws empate {
 		Mensajero PeorEmpleado=null;
 		int mayorquejas=0;
 		boolean empateQuejas=false;
@@ -154,7 +155,7 @@ public class Supermercado implements Serializable{
 			}
 		}
 		if (empateQuejas==true) {
-			return null;
+			throw new empate();
 		}
 		else{
 			return PeorEmpleado;

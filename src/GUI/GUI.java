@@ -1,6 +1,9 @@
 package GUI;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Random;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -18,16 +21,32 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import gestorAplicacion.productos.*;
+import gestorAplicacion.exceptions.empate;
+import gestorAplicacion.personas.*;
+import BaseDatos.*;
 public class GUI extends Application{
 	public static int hojaActual;
 	public static int Opcionsuper=0;
+	Random RNG=new Random();
+	Supermercado superm=null;
+	ArrayList<Supermercado>supermercados=Lector.getListaObjetos();
+	ArrayList<Carnes>carnes=new ArrayList<Carnes>();
+	ArrayList<Lacteos>lacteos=new ArrayList<Lacteos>();
+	ArrayList<Vegetales>vegetales=new ArrayList<Vegetales>();
+	ArrayList<Tecnologia>tecnologia=new ArrayList<Tecnologia>();
+	Usuario cajero=null;
 	public void start(Stage primarystage) {
 		
 		
@@ -389,8 +408,35 @@ public class GUI extends Application{
 		main2.setCenter(btnsuper);
 		main2.setBottom(m2p2);
 		Scene scene2=new Scene(main2,275,375);
-		BorderPane main3=new BorderPane();
-		Scene scene3=new Scene(main3,300,300);
+		BorderPane inicial = new BorderPane();
+		GridPane menu_bienvenida = new GridPane();
+		menu_bienvenida.setPadding(new Insets(10,10,10,10));
+		GridPane.setConstraints(menu_bienvenida, 2, 2);
+		menu_bienvenida.setVgap(5);
+		menu_bienvenida.setHgap(5);
+		inicial.setCenter(menu_bienvenida);
+		menu_bienvenida.setAlignment(Pos.CENTER);
+		MenuBar barramenu= new MenuBar();
+		Menu archivo = new Menu("Archivo");
+		Menu procesos_consultas = new Menu("Procesos y consultas");
+		Menu ayuda = new Menu("Ayuda");
+		barramenu.getMenus().add(archivo);
+		barramenu.getMenus().add(procesos_consultas);
+		barramenu.getMenus().add(ayuda);
+		MenuItem usuario = new MenuItem("Usuario");
+		MenuItem salir = new MenuItem("Salir");
+		MenuItem facturacion = new MenuItem("Comprar");
+		MenuItem mas_facturas = new MenuItem("Mejor empleado");
+		MenuItem mas_quejas = new MenuItem("Siguiente despido");
+		MenuItem producto_mas_menos = new MenuItem("Producto mas y menos vendido");
+		MenuItem salario = new MenuItem("Salarios");
+		MenuItem agregar_producto = new MenuItem("Agregar producto");
+		MenuItem acerca_de = new MenuItem("Acerca de");
+		archivo.getItems().addAll(usuario,salir);
+		procesos_consultas.getItems().addAll(facturacion,mas_facturas,mas_quejas,producto_mas_menos,salario,agregar_producto);
+		ayuda.getItems().addAll(acerca_de);
+		inicial.setTop(barramenu);
+		Scene scene3=new Scene(inicial,300,300);
 		//INGRESAR
 		bt4.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
@@ -447,7 +493,27 @@ public class GUI extends Application{
 			public void handle(MouseEvent event){
 				try {
 					if(Opcionsuper!=0) {
-						primarystage.setTitle("prueba3");
+						superm=supermercados.get(Opcionsuper-1);
+						for (int x=0;x<superm.getProducts().size();x++) {
+							Producto pro=superm.getProducts().get(x);
+							if (pro instanceof Carnes) {
+								carnes.add((Carnes) pro);
+							}
+							else if(pro instanceof Lacteos) {
+								lacteos.add((Lacteos)pro);
+							}
+							else if(pro instanceof Vegetales) {
+								vegetales.add((Vegetales)pro);
+							}
+							else if(pro instanceof Tecnologia) {
+								tecnologia.add((Tecnologia)pro);
+							}
+						}
+						int i=RNG.nextInt(superm.Cajero.size());
+						cajero=superm.Cajero.get(i);
+						Label bienvenida= new Label("Bienvenido al sistema de servicio del supermercado "+superm.getNombre()+".");
+						menu_bienvenida.add(bienvenida,1,1);
+						primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
 						primarystage.setScene(scene3);
 						primarystage.show();
 				}
@@ -465,11 +531,114 @@ public class GUI extends Application{
 
 			}
 		});
-		
+		Alert alerta_informacion = new Alert(AlertType.INFORMATION);
+		Alert alerta_error = new Alert(AlertType.ERROR);
+		usuario.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event){
+				alerta_informacion.setTitle("Informacion del usuario.");
+				alerta_informacion.setHeaderText("Esta es la informacion que se tiene acerca del usuario:");
+				alerta_informacion.setContentText("ID: "+cajero.getId()+"\n"+"Nombre: "+cajero.getNombre()+"\n"+"Genero: "+cajero.getGenero()+"\n");
+				alerta_informacion.show();
+			}
+		});
+		salir.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event){
+				primarystage.setTitle("Ventana de bienvenida.");
+				menu_bienvenida.getChildren().clear();
+				Opcionsuper=0;
+				lbl2wind.setCenter(mensajeopcion[0]);
+				primarystage.setScene(scene1);
+			}
+		});
+		mas_facturas.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event){
+				try {
+					superm.MejorMensajero();
+					alerta_informacion.setTitle("Mejor empleado.");
+					alerta_informacion.setHeaderText("Debido a su numero de facturas procesadas se ha determinado que el mejor empleado del supermercado "+superm.getNombre()+" es:");
+					alerta_informacion.setContentText("-> "+superm.MejorMensajero().getNombre());
+					alerta_informacion.show();
+				} catch (empate e) {
+					alerta_error.setTitle("Mejor empleado.");
+					alerta_error.setHeaderText("Se ha producido un error a la hora de decidir el mejor empleado.");
+					alerta_error.setContentText("Por motivos de empate o falta de ventas de no se ha podido definir al mejor empleado del supermercado "+superm.getNombre()+".");
+					alerta_error.show();
+				}
+			}
+		});
+		mas_quejas.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event){
+				try {
+					superm.MensajeroConMasQuejas();
+					alerta_informacion.setTitle("Empleado con mas quejas.");
+					alerta_informacion.setHeaderText("Debido a su alto numero de quejas se ha determino que el empleado mas deficiente del supermercado "+superm.getNombre()+" es:");
+					alerta_informacion.setContentText("-> "+superm.MensajeroConMasQuejas().getNombre());
+					alerta_informacion.show();
+				} catch (empate e) {
+					alerta_error.setTitle("Empleado con mas quejas.");
+					alerta_error.setHeaderText("Se ha producido un error a la hora de verificar el empleado con mas quejas.");
+					alerta_error.setContentText("Por motivos de empate o insuficientes quejas no se ha podido definir al empleado mas deficiente del supermercado "+superm.getNombre()+".");
+					alerta_error.show();
+				}
+			}
+		});
+		producto_mas_menos.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event){
+				try {
+					superm.prodMasPopular();
+					try {
+						superm.prodMenosPopular();
+						alerta_informacion.setTitle("Popularidad de productos.");
+						alerta_informacion.setHeaderText("Debido a sus numeros de ventas se ha determinado que el producto mas y menos popular, respectivamente del supermercado "+superm.getNombre()+" son:");
+						alerta_informacion.setContentText("+ "+superm.prodMasPopular()+"\n"+"- "+superm.prodMenosPopular());
+						alerta_informacion.show();
+					} catch (empate e) {
+						alerta_informacion.setTitle("Popularidad de productos.");
+						alerta_informacion.setHeaderText("Debido a su numero de ventas se ha determinado que el producto mas popular del supermercado "+superm.getNombre()+" es:");
+						alerta_informacion.setContentText("+ "+superm.prodMasPopular()+"\n"+"No se ha podido determinar el producto menos popular.");
+						alerta_informacion.show();
+					}
+				} catch (empate e) {
+					try {
+						superm.prodMenosPopular();
+						alerta_informacion.setTitle("Popularidad de productos.");
+						alerta_informacion.setHeaderText("Debido a su numero de venta se ha determinado que el producto menos popular del supermercado "+superm.getNombre()+" es:");
+						alerta_informacion.setContentText("+ "+superm.prodMenosPopular()+"\n"+"No se ha podido determinar el producto mas popular.");
+						alerta_informacion.show();
+					} catch (empate i) {
+						alerta_error.setTitle("Popularidad de productos.");
+						alerta_error.setHeaderText("Se ha producido un error a la hora de verificar el producto mas y menos popular.");
+						alerta_error.setContentText("Por motivos de empate o insuficientes ventas no se ha podido definir el producto mas y menos popular del supermercado "+superm.getNombre()+".");
+						alerta_error.show();
+					}
+				}
+				}
+		});
+		salario.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event){
+				String salarios="";
+				for (int k=0;k<superm.Empleados.size();k++) {
+					salarios+=superm.Empleados.get(k).getNombre()+": "+superm.Empleados.get(k).pagoTotal()+" Pesos\n";
+				}
+				alerta_informacion.setTitle("Salarios.");
+				alerta_informacion.setHeaderText("Los siguientes son los nombres de los empleado del supermercado "+superm.getNombre()+" y sus respectivos salarios:");
+				alerta_informacion.setContentText(salarios);
+				alerta_informacion.show();
+			}
+		});
+		acerca_de.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event){
+				alerta_informacion.setTitle("Acerca de:");
+				alerta_informacion.setHeaderText("Estos son los creadores de este gran y glorioso programa:");
+				alerta_informacion.setContentText("Andres Bañol Casasbuenas \nJuan Carlos Munera Arango \nSantiago Herrera Pineda");
+				alerta_informacion.show();
+			}
+		});
 	}
 	
 
 public static void main(String[] args) {
+	Lector.Leer();
    launch(args);
 }
 }

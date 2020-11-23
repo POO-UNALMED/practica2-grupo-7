@@ -1,4 +1,5 @@
 package gestorAplicacion.personas;
+import gestorAplicacion.exceptions.empate;
 import gestorAplicacion.productos.*;
 import java.io.Serializable;
 
@@ -64,7 +65,7 @@ public class Mensajero extends Persona implements Empleado,Serializable{
 		}
 	}
 	//SOBRECARGA METODO 1 (BUSCA MOSTRAR EL SALARIO DEL MENSAJERO, Y SI ESTE ES EL MENSAJERO DEL MES SE LE DA UN BONO)
-	public int pagoTotal(Mensajero mensajero) {
+	public int pagoTotal(Mensajero mensajero) throws empate {
 		if (mensajero==superm.MejorMensajero()) {
 			return mensajero.pagoTotal()+100000;
 		}
