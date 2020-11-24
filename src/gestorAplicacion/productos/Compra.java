@@ -2,6 +2,7 @@ package gestorAplicacion.productos;
 import gestorAplicacion.personas.*;
 import java.util.ArrayList;
 import java.io.Serializable;
+import gestorAplicacion.exceptions.*;
 public class Compra implements Serializable {
 	/**
 	 * 
@@ -87,7 +88,7 @@ public class Compra implements Serializable {
 		this.fact = fact;
 	}
 	//EL METODO QUE SUMA LOS PRECIOS,REDUCE LA CANTIDAD,CREA EL DETALLE DE FACTURA CORRESPONDIENTE Y VERIFICA LA RIFA DE UN PRODUCTO AL SER PEDIDO
-	public void agregar(Producto pro,int cant,Supermercado superm) {	
+	public void agregar(Producto pro,int cant,Supermercado superm) throws compraSuperiorAStock {	
 		if (pro.comprobarStock(pro,cant)==true) {
 			for (int i=0;i<cant;i++) {
 				superm.Estadisticas.add(pro.nom_producto);
@@ -100,7 +101,7 @@ public class Compra implements Serializable {
 			DetalleFacturaList.add(item);
 		}
 		else {
-			System.out.println("El producto se encuentra agotado");
+			throw new compraSuperiorAStock();
 		}
 	}
 	//ESTE METODO CREA LA FACTURA CON LOS DATOS MODIFICADOS POR EL METODO AGREGAR, ADEMAS VERIFICA EL TOTAL PARA DAR PROPINAS,ASIGNA UNA FACTURA A LOS DETALLES DE LA FACTURA,GUARDA LA INFORMACION DE ESTA COMPRA EN LA LISTA DE COMPRAS DEL CAJERO Y ASIGNA UN OBJETO FACTURA A EL OBJETO COMPRA
