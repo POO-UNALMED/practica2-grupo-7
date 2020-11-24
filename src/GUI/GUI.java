@@ -39,7 +39,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import gestorAplicacion.productos.*;
-import gestorAplicacion.exceptions.empate;
+import gestorAplicacion.exceptions.*;
 import gestorAplicacion.personas.*;
 import BaseDatos.*;
 public class GUI extends Application{
@@ -170,10 +170,14 @@ public class GUI extends Application{
 		hojaVida[0] = new Label( "Juan Carlos\n Ocupacion: Estudiante\n Aspiraciones: Ser un gamedev profesional \n Esperanza: Que el profe nos ponga 5");
 		hojaVida[0].setPrefWidth(200);
 		hojaVida[0].setWrapText(true);
-		hojaVida[1] = new Label("Santiago el furro jajajajajajajajajajajajajaja");
+		hojaVida[1] = new Label("Santiago Herrera\n Ocupacion: Estudiante\n Aspiraciones: Acabar este semestre, luego ya se vera \n Esperanza: Que el profe nos ponga 5 x2");
 		hojaVida[1].setPrefWidth(200);
 		hojaVida[1].setWrapText(true);
-		hojaVida[2] = new Label("Andres el streamer jajajajajajajajajajajajajajajajajajaja");
+<<<<<<< HEAD
+		hojaVida[2] = new Label("Andres Bañol\n Ocupacion: Estudiante\n Aspiraciones: Ser un gamedev profesional \n Esperanza: Que el profe nos ponga 5 x3");
+=======
+		hojaVida[2] = new Label("Andres Bañol \n Ocupacion: Estudiante \n Aspiraciones: n/a \n Esperanza: Ganar el ultimo parcial de ecuaciones y calculo");
+>>>>>>> 49de82eb5bb156bdae1efde32e5f2e82f0d2b4e4
 		hojaVida[2].setPrefWidth(200);
 		hojaVida[2].setWrapText(true);
 		HBox p5=new HBox(hojaVida[0]);
@@ -324,7 +328,7 @@ public class GUI extends Application{
 		main1.setRight(p2);
 		main1.setLeft(p1);
 		//primarystage
-		primarystage.setTitle("Ejemplo1");
+		primarystage.setTitle("Creadores e inicio.");
 		Scene scene1=new Scene(main1,450,450);
 		primarystage.setScene(scene1);
 		primarystage.show();
@@ -458,7 +462,7 @@ public class GUI extends Application{
 		bt4.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event){
-				primarystage.setTitle("prueba2");
+				primarystage.setTitle("Supermercados");
 				primarystage.setScene(scene2);
 				primarystage.show();
 
@@ -1103,8 +1107,9 @@ public class GUI extends Application{
 
 					@Override
 					public void handle(ActionEvent f) {
+						try {
 						// TODO Auto-generated method stub
-						int cantCompra= Integer.valueOf(text1.getText());						
+						int cantCompra= Integer.valueOf(text1.getText());
 						compra.agregar(product, cantCompra, superm);
 						Alert a = new Alert(AlertType.CONFIRMATION,"Su compra ha sido procesada, desea continuar comprando?"
 								,ButtonType.YES,ButtonType.NO);
@@ -1126,16 +1131,26 @@ public class GUI extends Application{
 							}
 							
 						});;
+					
+						}
+					 catch (compraSuperiorAStock e) {
+						// TODO Auto-generated catch block
+						alerta_error.setTitle("Error de Compra");
+						alerta_error.setHeaderText("Se ha producido un error a la hora de verificar la existencia de este producto");
+						alerta_error.setContentText("el producto solicitado no tiene suficiente stock disponible");
+						alerta_error.show();
 					}
 					
-				};
+				}};
 				confirmar.setOnAction(ev1);
 				confirBanco.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
 					@Override
 					public void handle(MouseEvent event) {
 						// TODO Auto-generated method stub
+						try {
 						String bancoSelec=(String) bancos.getValue();
+						if(bancoSelec!=null) {
 						factura=compra.efectuarCompra(bancoSelec);
 						compra.setFact(factura);						
 						Alert a = new Alert(AlertType.CONFIRMATION,"Compra realizada, tiene alguna queja respecto al servicio?"
@@ -1161,10 +1176,24 @@ public class GUI extends Application{
 											alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
 
 												@Override
-												public void handle(DialogEvent event) {
+												public void handle(DialogEvent q) {
 													// TODO Auto-generated method stub
-													primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
-													inicial.setCenter(menu_bienvenida);
+													Alert alerta_informacion2=new Alert(AlertType.INFORMATION);
+													alerta_informacion2.setResizable(true);
+													alerta_informacion2.setTitle("Factura");
+													alerta_informacion2.setHeaderText("La informacion de su factura es:");
+													alerta_informacion2.setContentText(factura.toString());
+													alerta_informacion2.show();
+													alerta_informacion2.setOnCloseRequest(new EventHandler<DialogEvent>() {
+
+														@Override
+														public void handle(DialogEvent event) {
+															// TODO Auto-generated method stub
+															primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+															inicial.setCenter(menu_bienvenida);
+														}
+
+													});
 												}
 
 											});
@@ -1180,6 +1209,7 @@ public class GUI extends Application{
 									alerta_informacion.setTitle("Factura");
 									alerta_informacion.setHeaderText("La informacion de su factura es:");
 									alerta_informacion.setContentText(factura.toString());
+									alerta_informacion.setResizable(true);
 									alerta_informacion.show();
 									alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
 
@@ -1193,10 +1223,21 @@ public class GUI extends Application{
 									});
 								};
 							}
-							
-						});
-					}
+						}
 
+						);
+					}
+						else {
+							throw new escojaUnPincheBanco();
+						}
+						} catch (escojaUnPincheBanco e) {
+							alerta_error.setTitle("Error al elegir Banco");
+							alerta_error.setHeaderText("Se ha producido un error a la hora de verificar su banco");
+							alerta_error.setContentText("Elija un banco valido");
+							alerta_error.show();
+						}
+						
+					}
 					});
 				//EVENT AGREGAR LACTEOS
 				Lacteos.setOnAction(new EventHandler<ActionEvent>() {
@@ -1213,56 +1254,69 @@ public class GUI extends Application{
 						aceptar2l.setOnMouseClicked(new EventHandler<MouseEvent>() {
 							@Override
 							public void handle(MouseEvent event){
-								String nombrel=addprodl.getValue(0);
+								System.out.println(addprodl.getValue(0));
+								String nombrel=addprodl.getValue(0);								
 								String cantl=addprodl.getValue(1);
 								String preciol=addprodl.getValue(2);
 								String idl=addprodl.getValue(3);
-								int matchingl=0;
-								for (int x=0;x<listalacteos.size();x++) {
+								ArrayList<TextField> munera=addprodl.vals;
+								try {
+									if(munera.get(0).getText().equals("")||munera.get(1).getText().equals("")||munera.get(2).getText().equals("")||munera.get(3).getText().equals("")) {
+										throw new campoVacio();
+									}
+									else {
+										int matchingl=0;
+										for (int x=0;x<listalacteos.size();x++) {
 
-						        	if (listalacteos.get(x).nom_producto.equals(nombrel)) {
-						        		listalacteos.get(x).stock+=Integer.valueOf(cantl);
-						        		matchingl+=1;
-						        		alerta_informacion.setTitle("Producto agregado");
-										alerta_informacion.setHeaderText("el producto ya existia");
-										alerta_informacion.setContentText("Se agrego el stock");
-										alerta_informacion.show();
-										alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
+								        	if (listalacteos.get(x).nom_producto.equals(nombrel)) {
+								        		listalacteos.get(x).stock+=Integer.valueOf(cantl);
+								        		matchingl+=1;
+								        		alerta_informacion.setTitle("Producto agregado");
+												alerta_informacion.setHeaderText("el producto ya existia");
+												alerta_informacion.setContentText("Se agrego el stock");
+												alerta_informacion.show();
+												alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
 
-											@Override
-											public void handle(DialogEvent event) {
-												// TODO Auto-generated method stub
-												addprodl.ClearFields();
-												primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
-												inicial.setCenter(menu_bienvenida);
-											}
+													@Override
+													public void handle(DialogEvent event) {
+														// TODO Auto-generated method stub
+														addprodl.ClearFields();
+														primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+														inicial.setCenter(menu_bienvenida);
+													}
 
-										});
-						        	}
-						        	else {
-						        		
-						        	}
-								}
-								if (matchingl!=1) {
-									Lacteos lechegenerica=new Lacteos(idl,Integer.valueOf(preciol),nombrel,Integer.valueOf(cantl),"Lacteos");
-									listalacteos.add(lechegenerica);
-									alerta_informacion.setTitle("Producto agregado");
-									alerta_informacion.setHeaderText("el producto ha sido guardado");
-									alerta_informacion.setContentText("El producto ha sido agregado");
-									alerta_informacion.show();
-									alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
-
-										@Override
-										public void handle(DialogEvent event) {
-											// TODO Auto-generated method stub
-											addprodl.ClearFields();
-											primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
-											inicial.setCenter(menu_bienvenida);
+												});
+								        	}
 										}
+										if (matchingl!=1) {
+											Lacteos lechegenerica=new Lacteos(idl,Integer.valueOf(preciol),nombrel,Integer.valueOf(cantl),"Lacteos");
+											listalacteos.add(lechegenerica);
+											superm.getProducts().add(lechegenerica);
+											alerta_informacion.setTitle("Producto agregado");
+											alerta_informacion.setHeaderText("el producto ha sido guardado");
+											alerta_informacion.setContentText("El producto ha sido agregado");
+											alerta_informacion.show();
+											alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
 
-									});
-									
+												@Override
+												public void handle(DialogEvent event) {
+													// TODO Auto-generated method stub
+													addprodl.ClearFields();
+													primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+													inicial.setCenter(menu_bienvenida);
+												}
+
+											});
+											
+										}
+									}
+								} catch(campoVacio e){
+									alerta_error.setTitle("Error");
+									alerta_error.setHeaderText("Se ha producido un error a la hora de verificar el producto a ingresar");
+									alerta_error.setContentText("Rellene todos los espacios");
+									alerta_error.show();
 								}
+								
 								
 								
 								
@@ -1295,55 +1349,62 @@ public class GUI extends Application{
 								String precio=addprod.getValue(2);
 								String id=addprod.getValue(3);
 								String peso=addprod.getValue(4);
-								
-								
-								int matching=0;
-								for (int x=0;x<listacarnes.size();x++) {
-						        	if (listacarnes.get(x).nom_producto.equals(nombre)) {
-						        		listacarnes.get(x).stock+=Integer.valueOf(cant);
-						        		matching+=1;
-						        		alerta_informacion.setTitle("Producto agregado");
-										alerta_informacion.setHeaderText("el producto ya existia");
-										alerta_informacion.setContentText("Se agrego el stock");
-										alerta_informacion.show();
-										alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
+								ArrayList<TextField> munera2=addprod.vals;
+								try {
+									if(munera2.get(0).getText().equals("")||munera2.get(1).getText().equals("")||munera2.get(2).getText().equals("")||munera2.get(3).getText().equals("")||munera2.get(4).getText().equals("")) {
+										throw new campoVacio();
+									}
+									else {
+										int matching=0;
+										for (int x=0;x<listacarnes.size();x++) {
+								        	if (listacarnes.get(x).nom_producto.equals(nombre)) {
+								        		listacarnes.get(x).stock+=Integer.valueOf(cant);
+								        		matching+=1;
+								        		alerta_informacion.setTitle("Producto agregado");
+												alerta_informacion.setHeaderText("el producto ya existia");
+												alerta_informacion.setContentText("Se agrego el stock");
+												alerta_informacion.show();
+												alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
 
-											@Override
-											public void handle(DialogEvent event) {
-												// TODO Auto-generated method stub
-												addprod.ClearFields();
-												primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
-												inicial.setCenter(menu_bienvenida);
-											}
+													@Override
+													public void handle(DialogEvent event) {
+														// TODO Auto-generated method stub
+														addprod.ClearFields();
+														primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+														inicial.setCenter(menu_bienvenida);
+													}
 
-										});
-						        	}
-								}
-								if (matching!=1) {
-									Carnes carnegenerica=new Carnes(id,Integer.valueOf(precio),nombre,Integer.valueOf(cant),"Carnes",Integer.valueOf(peso));
-									listacarnes.add(carnegenerica);
-									alerta_informacion.setTitle("Producto agregado");
-									alerta_informacion.setHeaderText("el producto ha sido guardado");
-									alerta_informacion.setContentText("El producto ha sido agregado");
-									alerta_informacion.show();
-									alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
-
-										@Override
-										public void handle(DialogEvent event) {
-											// TODO Auto-generated method stub
-											addprod.ClearFields();
-											primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
-											inicial.setCenter(menu_bienvenida);
+												});
+								        	}
 										}
+										if (matching!=1) {
+											Carnes carnegenerica=new Carnes(id,Integer.valueOf(precio),nombre,Integer.valueOf(cant),"Carnes",Integer.valueOf(peso));
+											listacarnes.add(carnegenerica);
+											superm.getProducts().add(carnegenerica);
+											alerta_informacion.setTitle("Producto agregado");
+											alerta_informacion.setHeaderText("el producto ha sido guardado");
+											alerta_informacion.setContentText("El producto ha sido agregado");
+											alerta_informacion.show();
+											alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
 
-									});
-									
+												@Override
+												public void handle(DialogEvent event) {
+													// TODO Auto-generated method stub
+													addprod.ClearFields();
+													primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+													inicial.setCenter(menu_bienvenida);
+												}
+
+											});
+											
+										}
+									}
+								}catch(campoVacio e){
+									alerta_error.setTitle("Error");
+									alerta_error.setHeaderText("Se ha producido un error a la hora de verificar el producto a ingresar");
+									alerta_error.setContentText("Rellene todos los espacios");
+									alerta_error.show();
 								}
-								
-								
-								
-
-
 
 							}
 						});
@@ -1370,6 +1431,12 @@ public class GUI extends Application{
 								String cantv=addprodv.getValue(1);
 								String preciov=addprodv.getValue(2);
 								String idv=addprodv.getValue(3);
+								ArrayList<TextField> munera3=addprodv.vals;
+								try {
+									if(munera3.get(0).getText().equals("")||munera3.get(1).getText().equals("")||munera3.get(2).getText().equals("")||munera3.get(3).getText().equals("")) {
+										throw new campoVacio();
+									}
+									else {
 								int matchingv=0;
 								for (int x=0;x<listavegetales.size();x++) {
 
@@ -1396,6 +1463,7 @@ public class GUI extends Application{
 								if (matchingv!=1) {
 									Vegetales vegetalgenerica=new Vegetales(idv,Integer.valueOf(preciov),nombrev,Integer.valueOf(cantv),"Vegetales");
 									listavegetales.add(vegetalgenerica);
+									superm.getProducts().add(vegetalgenerica);
 									alerta_informacion.setTitle("Producto agregado");
 									alerta_informacion.setHeaderText("el producto ha sido guardado");
 									alerta_informacion.setContentText("El producto ha sido agregado");
@@ -1414,9 +1482,14 @@ public class GUI extends Application{
 									
 								}
 								
+									}
 								
-								
-
+								}catch(campoVacio e){
+									alerta_error.setTitle("Error");
+									alerta_error.setHeaderText("Se ha producido un error a la hora de verificar el producto a ingresar");
+									alerta_error.setContentText("Rellene todos los espacios");
+									alerta_error.show();
+								}
 
 
 							}
@@ -1444,6 +1517,12 @@ public class GUI extends Application{
 								String cantt=addprodt.getValue(1);
 								String preciot=addprodt.getValue(2);
 								String idt=addprodt.getValue(3);
+								ArrayList<TextField> munera3=addprodt.vals;
+								try {
+									if(munera3.get(0).getText().equals("")||munera3.get(1).getText().equals("")||munera3.get(2).getText().equals("")||munera3.get(3).getText().equals("")) {
+										throw new campoVacio();
+									}
+									else {
 								int matchingt=0;
 								for (int x=0;x<listatecnologia.size();x++) {
 
@@ -1468,8 +1547,9 @@ public class GUI extends Application{
 						        	}
 								}
 								if (matchingt!=1) {
-									Tecnologia techgenerica=new Tecnologia(idt,Integer.valueOf(preciot),nombret,Integer.valueOf(cantt),"Vegetales");
+									Tecnologia techgenerica=new Tecnologia(idt,Integer.valueOf(preciot),nombret,Integer.valueOf(cantt),"Tecnologia");
 									listatecnologia.add(techgenerica);
+									superm.getProducts().add(techgenerica);
 									alerta_informacion.setTitle("Producto agregado");
 									alerta_informacion.setHeaderText("el producto ha sido guardado");
 									alerta_informacion.setContentText("El producto ha sido agregado");
@@ -1488,8 +1568,13 @@ public class GUI extends Application{
 									
 								}
 								
-								
-								
+									}
+								}catch(campoVacio e){
+									alerta_error.setTitle("Error");
+									alerta_error.setHeaderText("Se ha producido un error a la hora de verificar el producto a ingresar");
+									alerta_error.setContentText("Rellene todos los espacios");
+									alerta_error.show();
+								}
 
 
 
