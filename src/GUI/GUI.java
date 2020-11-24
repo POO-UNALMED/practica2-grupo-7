@@ -347,7 +347,7 @@ public class GUI extends Application{
 		mensajeopcion[3] = new Label("has escogido supermercados J&B");
 		mensajeopcion[3].setPrefWidth(150);
 		mensajeopcion[3].setWrapText(true);
-		mensajeopcion[4] = new Label("has escogido supermercados JUMBO");
+		mensajeopcion[4] = new Label("has escogido supermercados SURTIMAX");
 		mensajeopcion[4].setPrefWidth(150);
 		mensajeopcion[4].setWrapText(true);
 		try {
@@ -386,7 +386,7 @@ public class GUI extends Application{
 			ImageView im4=new ImageView(image4);
 			im4.setFitHeight(120);
 			im4.setFitWidth(120);
-			Button btn4 = new Button("JUMBO", im4);
+			Button btn4 = new Button("SURTIMAX", im4);
 			btn4.setStyle("-fx-base: greenyellow;");
 			btn4.setContentDisplay(ContentDisplay.TOP);
 			btn4.setMaxSize(120, 50);
