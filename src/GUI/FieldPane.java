@@ -70,6 +70,11 @@ public class FieldPane extends Pane {
 			vals.get(i).setEditable(habilitado[i]);
 		}
 	}
+	public void ClearFields() {
+		for(int i=0;i<vals.size();i++) {
+			vals.get(i).setText("");;
+		}
+	}
 	public GridPane getChild() {
 		return child;
 	}

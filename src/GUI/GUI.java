@@ -452,7 +452,8 @@ public class GUI extends Application{
 		procesos_consultas.getItems().addAll(facturacion,mas_facturas,mas_quejas,producto_mas_menos,salario,agregar_producto);
 		ayuda.getItems().addAll(acerca_de);
 		inicial.setTop(barramenu);
-		Scene scene3=new Scene(inicial,300,300);
+		Scene scene3=new Scene(inicial,700,350);
+		
 		//INGRESAR
 		bt4.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
@@ -531,6 +532,7 @@ public class GUI extends Application{
 						menu_bienvenida.add(bienvenida,1,1);
 						primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
 						primarystage.setScene(scene3);
+						inicial.setCenter(menu_bienvenida);
 						primarystage.show();
 				}
 				else {
@@ -726,6 +728,39 @@ public class GUI extends Application{
 		g.add(f.getChild(), 1, 1);
 		Button aceptar1=new Button("Aceptar");
 		g.add(aceptar1, 1, 2);
+		//VENTANAS AGREGAR
+		//CARNE
+		GridPane Aprod=new GridPane(); Aprod.setHgap(5);
+		FieldPane addprod=agregarProdCarne();
+		Aprod.add(addprod.getChild(), 1, 1);
+		Button aceptar2=new Button("Aceptar");
+		Button regresar2=new Button("Regresar");
+		Aprod.add(aceptar2, 1, 2);
+		Aprod.add(regresar2, 2, 2);
+		//LACTEO
+		GridPane Aprodl=new GridPane(); Aprodl.setHgap(5);
+		FieldPane addprodl=agregarProdLact();
+		Aprodl.add(addprodl.getChild(), 1, 1);
+		Button aceptar2l=new Button("Aceptar");
+		Button regresar2l=new Button("Regresar");
+		Aprodl.add(aceptar2l, 1, 2);
+		Aprodl.add(regresar2l, 2, 2);
+		//VEGETALES
+		GridPane Aprodv=new GridPane(); Aprodv.setHgap(5);
+		FieldPane addprodv=agregarProdVeg();
+		Aprodv.add(addprodv.getChild(), 1, 1);
+		Button aceptar2v=new Button("Aceptar");
+		Button regresar2v=new Button("Regresar");
+		Aprodv.add(aceptar2v, 1, 2);
+		Aprodv.add(regresar2v, 2, 2);
+		//TECNOLOGIA
+		GridPane Aprodt=new GridPane(); Aprodt.setHgap(5);
+		FieldPane addprodt=agregarProdTecnologia();
+		Aprodt.add(addprodt.getChild(), 1, 1);
+		Button aceptar2t=new Button("Aceptar");
+		Button regresar2t=new Button("Regresar");
+		Aprodt.add(aceptar2t, 1, 2);
+		Aprodt.add(regresar2t, 2, 2);
 
 		// mostrar los productos disponibles del tipo elegido
 		class ComprarHandler implements EventHandler<ActionEvent>{
@@ -1163,22 +1198,344 @@ public class GUI extends Application{
 					}
 
 					});
+				//EVENT AGREGAR LACTEOS
+				Lacteos.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent event){
+						inicial.setCenter(Aprodl);
+						regresar2l.setOnMouseClicked(new EventHandler<MouseEvent>() {
+							@Override
+							public void handle(MouseEvent event){
+								addprodl.ClearFields();
+								primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+								inicial.setCenter(menu_bienvenida);
+							}
+						});
+						aceptar2l.setOnMouseClicked(new EventHandler<MouseEvent>() {
+							@Override
+							public void handle(MouseEvent event){
+								String nombrel=addprodl.getValue(0);
+								String cantl=addprodl.getValue(1);
+								String preciol=addprodl.getValue(2);
+								String idl=addprodl.getValue(3);
+								int matchingl=0;
+								for (int x=0;x<listalacteos.size();x++) {
+
+						        	if (listalacteos.get(x).nom_producto.equals(nombrel)) {
+						        		listalacteos.get(x).stock+=Integer.valueOf(cantl);
+						        		matchingl+=1;
+						        		alerta_informacion.setTitle("Producto agregado");
+										alerta_informacion.setHeaderText("el producto ya existia");
+										alerta_informacion.setContentText("Se agrego el stock");
+										alerta_informacion.show();
+										alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
+
+											@Override
+											public void handle(DialogEvent event) {
+												// TODO Auto-generated method stub
+												addprodl.ClearFields();
+												primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+												inicial.setCenter(menu_bienvenida);
+											}
+
+										});
+						        	}
+						        	else {
+						        		
+						        	}
+								}
+								if (matchingl!=1) {
+									Lacteos lechegenerica=new Lacteos(idl,Integer.valueOf(preciol),nombrel,Integer.valueOf(cantl),"Lacteos");
+									listalacteos.add(lechegenerica);
+									alerta_informacion.setTitle("Producto agregado");
+									alerta_informacion.setHeaderText("el producto ha sido guardado");
+									alerta_informacion.setContentText("El producto ha sido agregado");
+									alerta_informacion.show();
+									alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
+
+										@Override
+										public void handle(DialogEvent event) {
+											// TODO Auto-generated method stub
+											addprodl.ClearFields();
+											primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+											inicial.setCenter(menu_bienvenida);
+										}
+
+									});
+									
+								}
+								
+								
+								
+
+
+
+							}
+						});
+						
+						
+					}
+				});
+				//AGREGAR CARNES
+				Carnicos.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent event){
+						inicial.setCenter(Aprod);
+						regresar2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+							@Override
+							public void handle(MouseEvent event){
+								addprod.ClearFields();
+								primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+								inicial.setCenter(menu_bienvenida);
+							}
+						});
+						aceptar2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+							@Override
+							public void handle(MouseEvent event){
+								String nombre=addprod.getValue(0);
+								String cant=addprod.getValue(1);
+								String precio=addprod.getValue(2);
+								String id=addprod.getValue(3);
+								String peso=addprod.getValue(4);
+								
+								
+								int matching=0;
+								for (int x=0;x<listacarnes.size();x++) {
+						        	if (listacarnes.get(x).nom_producto.equals(nombre)) {
+						        		listacarnes.get(x).stock+=Integer.valueOf(cant);
+						        		matching+=1;
+						        		alerta_informacion.setTitle("Producto agregado");
+										alerta_informacion.setHeaderText("el producto ya existia");
+										alerta_informacion.setContentText("Se agrego el stock");
+										alerta_informacion.show();
+										alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
+
+											@Override
+											public void handle(DialogEvent event) {
+												// TODO Auto-generated method stub
+												addprod.ClearFields();
+												primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+												inicial.setCenter(menu_bienvenida);
+											}
+
+										});
+						        	}
+								}
+								if (matching!=1) {
+									Carnes carnegenerica=new Carnes(id,Integer.valueOf(precio),nombre,Integer.valueOf(cant),"Carnes",Integer.valueOf(peso));
+									listacarnes.add(carnegenerica);
+									alerta_informacion.setTitle("Producto agregado");
+									alerta_informacion.setHeaderText("el producto ha sido guardado");
+									alerta_informacion.setContentText("El producto ha sido agregado");
+									alerta_informacion.show();
+									alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
+
+										@Override
+										public void handle(DialogEvent event) {
+											// TODO Auto-generated method stub
+											addprod.ClearFields();
+											primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+											inicial.setCenter(menu_bienvenida);
+										}
+
+									});
+									
+								}
+								
+								
+								
+
+
+
+							}
+						});
+						
+						
+					}
+				});
+				//AGREGAR VEG
+				Vegetales.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent event){
+						inicial.setCenter(Aprodv);
+						regresar2v.setOnMouseClicked(new EventHandler<MouseEvent>() {
+							@Override
+							public void handle(MouseEvent event){
+								addprodv.ClearFields();
+								primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+								inicial.setCenter(menu_bienvenida);
+							}
+						});
+						aceptar2v.setOnMouseClicked(new EventHandler<MouseEvent>() {
+							@Override
+							public void handle(MouseEvent event){
+								String nombrev=addprodv.getValue(0);
+								String cantv=addprodv.getValue(1);
+								String preciov=addprodv.getValue(2);
+								String idv=addprodv.getValue(3);
+								int matchingv=0;
+								for (int x=0;x<listavegetales.size();x++) {
+
+						        	if (listavegetales.get(x).nom_producto.equals(nombrev)) {
+						        		listavegetales.get(x).stock+=Integer.valueOf(cantv);
+						        		matchingv+=1;
+						        		alerta_informacion.setTitle("Producto agregado");
+										alerta_informacion.setHeaderText("el producto ya existia");
+										alerta_informacion.setContentText("Se agrego el stock");
+										alerta_informacion.show();
+										alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
+
+											@Override
+											public void handle(DialogEvent event) {
+												// TODO Auto-generated method stub
+												addprodv.ClearFields();
+												primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+												inicial.setCenter(menu_bienvenida);
+											}
+
+										});
+						        	}
+								}
+								if (matchingv!=1) {
+									Vegetales vegetalgenerica=new Vegetales(idv,Integer.valueOf(preciov),nombrev,Integer.valueOf(cantv),"Vegetales");
+									listavegetales.add(vegetalgenerica);
+									alerta_informacion.setTitle("Producto agregado");
+									alerta_informacion.setHeaderText("el producto ha sido guardado");
+									alerta_informacion.setContentText("El producto ha sido agregado");
+									alerta_informacion.show();
+									alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
+
+										@Override
+										public void handle(DialogEvent event) {
+											// TODO Auto-generated method stub
+											addprodv.ClearFields();
+											primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+											inicial.setCenter(menu_bienvenida);
+										}
+
+									});
+									
+								}
+								
+								
+								
+
+
+
+							}
+						});
+						
+						
+					}
+				});
+				//AGREGAR TECH
+				Tecnologia.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent event){
+						inicial.setCenter(Aprodt);
+						regresar2t.setOnMouseClicked(new EventHandler<MouseEvent>() {
+							@Override
+							public void handle(MouseEvent event){
+								addprodt.ClearFields();
+								primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+								inicial.setCenter(menu_bienvenida);
+							}
+						});
+						aceptar2t.setOnMouseClicked(new EventHandler<MouseEvent>() {
+							@Override
+							public void handle(MouseEvent event){
+								String nombret=addprodt.getValue(0);
+								String cantt=addprodt.getValue(1);
+								String preciot=addprodt.getValue(2);
+								String idt=addprodt.getValue(3);
+								int matchingt=0;
+								for (int x=0;x<listatecnologia.size();x++) {
+
+						        	if (listatecnologia.get(x).nom_producto.equals(nombret)) {
+						        		listatecnologia.get(x).stock+=Integer.valueOf(cantt);
+						        		matchingt+=1;
+						        		alerta_informacion.setTitle("Producto agregado");
+										alerta_informacion.setHeaderText("el producto ya existia");
+										alerta_informacion.setContentText("Se agrego el stock");
+										alerta_informacion.show();
+										alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
+
+											@Override
+											public void handle(DialogEvent event) {
+												// TODO Auto-generated method stub
+												addprodt.ClearFields();
+												primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+												inicial.setCenter(menu_bienvenida);
+											}
+
+										});
+						        	}
+								}
+								if (matchingt!=1) {
+									Tecnologia techgenerica=new Tecnologia(idt,Integer.valueOf(preciot),nombret,Integer.valueOf(cantt),"Vegetales");
+									listatecnologia.add(techgenerica);
+									alerta_informacion.setTitle("Producto agregado");
+									alerta_informacion.setHeaderText("el producto ha sido guardado");
+									alerta_informacion.setContentText("El producto ha sido agregado");
+									alerta_informacion.show();
+									alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
+
+										@Override
+										public void handle(DialogEvent event) {
+											// TODO Auto-generated method stub
+											addprodt.ClearFields();
+											primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+											inicial.setCenter(menu_bienvenida);
+										}
+
+									});
+									
+								}
+								
+								
+								
+
+
+
+							}
+						});
+						
+						
+					}
+				});
 									
 				
 }
-public static FieldPane agregarProd() {
-		String[] Criterios= {"Nombre Producto:","Cantidad:","Precio:"};
-		String[] Valores={"","",""};
-		boolean[] habilitado=new boolean[3]; habilitado[0]=false;
+public static FieldPane agregarProdCarne() {
+		String[] Criterios= {"Nombre Producto:","Cantidad:","Precio:","ID:","Peso:"};
+		String[] Valores={"","","","",""};
+		boolean[] habilitado=new boolean[5]; habilitado[0]=false;
 		FieldPane res=new FieldPane("Criterios",Criterios,"Valores",Valores,null);
 		return res;
+}
+public static FieldPane agregarProdLact() {
+	String[] Criterios= {"Nombre Producto:","Cantidad:","Precio:","ID:"};
+	String[] Valores={"","","",""};
+	boolean[] habilitado=new boolean[4]; habilitado[0]=false;
+	FieldPane resl=new FieldPane("Criterios",Criterios,"Valores",Valores,null);
+	return resl;
+}
+public static FieldPane agregarProdVeg() {
+	String[] Criterios= {"Nombre Producto:","Cantidad:","Precio:","ID:"};
+	String[] Valores={"","","",""};
+	boolean[] habilitado=new boolean[4]; habilitado[0]=false;
+	FieldPane resv=new FieldPane("Criterios",Criterios,"Valores",Valores,null);
+	return resv;
+}
+public static FieldPane agregarProdTecnologia() {
+	String[] Criterios= {"Nombre Producto:","Cantidad:","Precio:","ID:"};
+	String[] Valores={"","","",""};
+	boolean[] habilitado=new boolean[4]; habilitado[0]=false;
+	FieldPane rest=new FieldPane("Criterios",Criterios,"Valores",Valores,null);
+	return rest;
 }
 public static FieldPane agregarQueja() {
 	String[] Criterios= {"Queja:"};
 	String[] Valores={""};
 	boolean[] habilitado=new boolean[1]; habilitado[0]=false;
-	FieldPane res=new FieldPane("Criterios",Criterios,"Valores",Valores,null);
-	return res;
+	FieldPane resq=new FieldPane("Criterios",Criterios,"Valores",Valores,null);
+	return resq;
 }
 
 	
