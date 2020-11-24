@@ -63,7 +63,7 @@ public abstract class Producto implements Serializable {
 	public boolean comprobarStock(Producto pro,int cant) {
 		
 	    int totalprod=pro.stock-cant;
-		if (totalprod>0) {
+		if (totalprod>=0) {
 			return true;	
 	}
 		else {
