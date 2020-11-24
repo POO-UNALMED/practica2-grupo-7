@@ -1139,6 +1139,8 @@ public class GUI extends Application{
 					
 				}};
 				confirmar.setOnAction(ev1);
+				
+				//Boton Confirmar de la pestaña de introducir el banco
 				confirBanco.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
 					@Override
@@ -1159,6 +1161,7 @@ public class GUI extends Application{
 							public void handle(DialogEvent no) {
 								// TODO Auto-generated method stub
 								if(a.getResult().equals(ButtonType.YES)) {
+									//El usuario decidio quejarse
 									inicial.setCenter(g);
 									aceptar1.setOnMouseClicked(new EventHandler<MouseEvent>() {
 										@Override
@@ -1174,6 +1177,7 @@ public class GUI extends Application{
 												@Override
 												public void handle(DialogEvent q) {
 													// TODO Auto-generated method stub
+													//mostrar la factura generada
 													Alert alerta_informacion2=new Alert(AlertType.INFORMATION);
 													alerta_informacion2.setResizable(true);
 													alerta_informacion2.setTitle("Factura");
@@ -1185,6 +1189,8 @@ public class GUI extends Application{
 														@Override
 														public void handle(DialogEvent event) {
 															// TODO Auto-generated method stub
+															//volver al menu principal
+															Lector.Escribir();
 															primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
 															inicial.setCenter(menu_bienvenida);
 														}
@@ -1202,6 +1208,7 @@ public class GUI extends Application{
 									});
 								}
 								else{
+									//no decidio quejarse, se pasa a la factura
 									alerta_informacion.setTitle("Factura");
 									alerta_informacion.setHeaderText("La informacion de su factura es:");
 									alerta_informacion.setContentText(factura.toString());
@@ -1212,6 +1219,8 @@ public class GUI extends Application{
 										@Override
 										public void handle(DialogEvent event) {
 											// TODO Auto-generated method stub
+											//volver al menu principal
+											Lector.Escribir();
 											primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
 											inicial.setCenter(menu_bienvenida);
 										}
@@ -1276,6 +1285,8 @@ public class GUI extends Application{
 													@Override
 													public void handle(DialogEvent event) {
 														// TODO Auto-generated method stub
+														//Volver al menu principal
+														Lector.Escribir();
 														addprodl.ClearFields();
 														primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
 														inicial.setCenter(menu_bienvenida);
@@ -1297,6 +1308,8 @@ public class GUI extends Application{
 												@Override
 												public void handle(DialogEvent event) {
 													// TODO Auto-generated method stub
+													//Volver al menu principal
+													Lector.Escribir();
 													addprodl.ClearFields();
 													primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
 													inicial.setCenter(menu_bienvenida);
@@ -1365,6 +1378,8 @@ public class GUI extends Application{
 													@Override
 													public void handle(DialogEvent event) {
 														// TODO Auto-generated method stub
+														//Volver al menu principal
+														Lector.Escribir();
 														addprod.ClearFields();
 														primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
 														inicial.setCenter(menu_bienvenida);
@@ -1386,6 +1401,8 @@ public class GUI extends Application{
 												@Override
 												public void handle(DialogEvent event) {
 													// TODO Auto-generated method stub
+													//Volver al menu principal
+													Lector.Escribir();
 													addprod.ClearFields();
 													primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
 													inicial.setCenter(menu_bienvenida);
@@ -1448,6 +1465,8 @@ public class GUI extends Application{
 											@Override
 											public void handle(DialogEvent event) {
 												// TODO Auto-generated method stub
+												//volver al menu principal
+												Lector.Escribir();
 												addprodv.ClearFields();
 												primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
 												inicial.setCenter(menu_bienvenida);
@@ -1469,6 +1488,8 @@ public class GUI extends Application{
 										@Override
 										public void handle(DialogEvent event) {
 											// TODO Auto-generated method stub
+											//Volver al menu principal
+											Lector.Escribir();
 											addprodv.ClearFields();
 											primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
 											inicial.setCenter(menu_bienvenida);
@@ -1534,6 +1555,8 @@ public class GUI extends Application{
 											@Override
 											public void handle(DialogEvent event) {
 												// TODO Auto-generated method stub
+												//Volver al menu principal
+												Lector.Escribir();
 												addprodt.ClearFields();
 												primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
 												inicial.setCenter(menu_bienvenida);
@@ -1555,6 +1578,8 @@ public class GUI extends Application{
 										@Override
 										public void handle(DialogEvent event) {
 											// TODO Auto-generated method stub
+											//Volver al menu principal
+											Lector.Escribir();
 											addprodt.ClearFields();
 											primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
 											inicial.setCenter(menu_bienvenida);
