@@ -26,6 +26,57 @@ public class Compra implements Serializable {
 	public Usuario getUser() {
 		return user;
 	}
+	public Mensajero getMenID() {
+		return menID;
+	}
+	public void setMenID(Mensajero menID) {
+		this.menID = menID;
+	}
+	public Supermercado getSuperm() {
+		return superm;
+	}
+	public void setSuperm(Supermercado superm) {
+		this.superm = superm;
+	}
+	public static int getContadoridf() {
+		return contadoridf;
+	}
+	public static void setContadoridf(int contadoridf) {
+		Compra.contadoridf = contadoridf;
+	}
+	public boolean isPropinabool() {
+		return propinabool;
+	}
+	public void setPropinabool(boolean propinabool) {
+		this.propinabool = propinabool;
+	}
+	public double getSumValorAgregado() {
+		return sumValorAgregado;
+	}
+	public void setSumValorAgregado(double sumValorAgregado) {
+		this.sumValorAgregado = sumValorAgregado;
+	}
+	public ArrayList<DetalleFactura> getDetalleFacturaList() {
+		return DetalleFacturaList;
+	}
+	public void setDetalleFacturaList(ArrayList<DetalleFactura> detalleFacturaList) {
+		DetalleFacturaList = detalleFacturaList;
+	}
+	public double getSubtotal_fact() {
+		return subtotal_fact;
+	}
+	public void setSubtotal_fact(double subtotal_fact) {
+		this.subtotal_fact = subtotal_fact;
+	}
+	public double getTotal() {
+		return total;
+	}
+	public void setTotal(double total) {
+		this.total = total;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 	public void setUser(Usuario user) {
 		this.user = user;
 	}
@@ -36,29 +87,7 @@ public class Compra implements Serializable {
 		this.fact = fact;
 	}
 	//EL METODO QUE SUMA LOS PRECIOS,REDUCE LA CANTIDAD,CREA EL DETALLE DE FACTURA CORRESPONDIENTE Y VERIFICA LA RIFA DE UN PRODUCTO AL SER PEDIDO
-	public void agregar(Producto pro,int cant,Supermercado superm) {
-		//ULTIMA FUNCIONALIDAD
-		if (pro instanceof Tecnologia) {
-			if(pro.precio>1000000) {
-				System.out.println("Por su compra de "+pro.nom_producto+" se le ha dado una chance de usar la ruleta de la suerte");
-				if(Tecnologia.GirarRuleta()==true) {
-					System.out.println("Enhorabuena!! Has ganado la ruleta y por esto se le ha regalado un celular Xiaomi");
-					Tecnologia CelularX=new Tecnologia();
-					if (CelularX.comprobarStock(pro,cant)==true) {
-						for (int i=0;i<cant;i++) {
-							superm.Estadisticas.add(CelularX.nom_producto);
-						}
-					}
-						else {
-							System.out.println("El producto se encuentra agotado");
-						}
-					
-				}
-				else {
-					System.out.println("Lamentablemente hoy no fue tu dia de suerte, intentalo otra vez en otro tiempo");
-				}
-			}
-		}
+	public void agregar(Producto pro,int cant,Supermercado superm) {	
 		if (pro.comprobarStock(pro,cant)==true) {
 			for (int i=0;i<cant;i++) {
 				superm.Estadisticas.add(pro.nom_producto);

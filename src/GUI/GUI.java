@@ -45,6 +45,7 @@ import BaseDatos.*;
 public class GUI extends Application{
 	public static int hojaActual;
 	public static int Opcionsuper=0;
+	public int r;
 	Random RNG=new Random();
 	private static Producto product;
 	private static Label stockLabel=new Label("");
@@ -519,8 +520,8 @@ public class GUI extends Application{
 								listatecnologia.add((Tecnologia)pro);
 							}
 						}
-						int i=RNG.nextInt(superm.Cajero.size());
-						cajero=superm.Cajero.get(i);
+						r=RNG.nextInt(superm.Cajero.size());
+						cajero=superm.Cajero.get(r);
 						Label bienvenida= new Label("Bienvenido al sistema de servicio del supermercado "+superm.getNombre()+".");
 						menu_bienvenida.add(bienvenida,1,1);
 						primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
@@ -713,6 +714,13 @@ public class GUI extends Application{
 		lavida.setTop(encabezado);
 		lavida.setCenter(lol);
 		lavida.setBottom(pie);
+		
+		//VENTANA QUEJAS
+		GridPane g=new GridPane(); g.setHgap(5);
+		FieldPane f=agregarQueja();
+		g.add(f.getChild(), 1, 1);
+		Button aceptar1=new Button("Aceptar");
+		g.add(aceptar1, 1, 2);
 
 		// mostrar los productos disponibles del tipo elegido
 		class ComprarHandler implements EventHandler<ActionEvent>{
@@ -1100,6 +1108,33 @@ public class GUI extends Application{
 							public void handle(DialogEvent no) {
 								// TODO Auto-generated method stub
 								if(a.getResult().equals(ButtonType.YES)) {
+									inicial.setCenter(g);
+									aceptar1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+										@Override
+										public void handle(MouseEvent event){
+											String queja=f.getValue(0);
+											superm.Cajero.get(r).Quejarse(compra,queja);
+											alerta_informacion.setTitle("Queja completa");
+											alerta_informacion.setHeaderText("su queja ha sido guardada");
+											alerta_informacion.setContentText("su queja se ha aplicado en a el mensajer@ "+compra.getMenID().getNombre());
+											alerta_informacion.show();
+											alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
+
+												@Override
+												public void handle(DialogEvent event) {
+													// TODO Auto-generated method stub
+													primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
+													inicial.setCenter(menu_bienvenida);
+												}
+
+											});
+											
+											
+
+
+
+										}
+									});
 								}
 								else{
 									alerta_informacion.setTitle("Factura");
@@ -1111,6 +1146,7 @@ public class GUI extends Application{
 										@Override
 										public void handle(DialogEvent event) {
 											// TODO Auto-generated method stub
+											primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
 											inicial.setCenter(menu_bienvenida);
 										}
 
@@ -1124,6 +1160,20 @@ public class GUI extends Application{
 					});
 									
 				
+}
+public static FieldPane agregarProd() {
+		String[] Criterios= {"Nombre Producto:","Cantidad:","Precio:"};
+		String[] Valores={"","",""};
+		boolean[] habilitado=new boolean[3]; habilitado[0]=false;
+		FieldPane res=new FieldPane("Criterios",Criterios,"Valores",Valores,null);
+		return res;
+}
+public static FieldPane agregarQueja() {
+	String[] Criterios= {"Queja:"};
+	String[] Valores={""};
+	boolean[] habilitado=new boolean[1]; habilitado[0]=false;
+	FieldPane res=new FieldPane("Criterios",Criterios,"Valores",Valores,null);
+	return res;
 }
 
 	
