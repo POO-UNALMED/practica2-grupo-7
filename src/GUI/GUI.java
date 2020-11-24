@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -19,11 +21,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -40,12 +46,16 @@ public class GUI extends Application{
 	public static int hojaActual;
 	public static int Opcionsuper=0;
 	Random RNG=new Random();
+	private static Producto product;
+	private static Label stockLabel=new Label("");
+	Compra compra;
+	Factura factura;
 	Supermercado superm=null;
 	ArrayList<Supermercado>supermercados=Lector.getListaObjetos();
-	ArrayList<Carnes>carnes=new ArrayList<Carnes>();
-	ArrayList<Lacteos>lacteos=new ArrayList<Lacteos>();
-	ArrayList<Vegetales>vegetales=new ArrayList<Vegetales>();
-	ArrayList<Tecnologia>tecnologia=new ArrayList<Tecnologia>();
+	ArrayList<Carnes>listacarnes=new ArrayList<Carnes>();
+	ArrayList<Lacteos>listalacteos=new ArrayList<Lacteos>();
+	ArrayList<Vegetales>listavegetales=new ArrayList<Vegetales>();
+	ArrayList<Tecnologia>listatecnologia=new ArrayList<Tecnologia>();
 	Usuario cajero=null;
 	public void start(Stage primarystage) {
 		
@@ -497,16 +507,16 @@ public class GUI extends Application{
 						for (int x=0;x<superm.getProducts().size();x++) {
 							Producto pro=superm.getProducts().get(x);
 							if (pro instanceof Carnes) {
-								carnes.add((Carnes) pro);
+								listacarnes.add((Carnes) pro);
 							}
 							else if(pro instanceof Lacteos) {
-								lacteos.add((Lacteos)pro);
+								listalacteos.add((Lacteos)pro);
 							}
 							else if(pro instanceof Vegetales) {
-								vegetales.add((Vegetales)pro);
+								listavegetales.add((Vegetales)pro);
 							}
 							else if(pro instanceof Tecnologia) {
-								tecnologia.add((Tecnologia)pro);
+								listatecnologia.add((Tecnologia)pro);
 							}
 						}
 						int i=RNG.nextInt(superm.Cajero.size());
@@ -634,9 +644,489 @@ public class GUI extends Application{
 				alerta_informacion.show();
 			}
 		});
-	}
-	
+		//ingresar la cantidad a comprar//
+		GridPane paisan= new GridPane();
+		paisan.setAlignment(Pos.CENTER);
+		paisan.setVgap(10); 
+		paisan.add(new Label("Stock disponible del producto seleccionado: "), 0, 0);
+		paisan.add(stockLabel, 1, 0);
+		paisan.add(new Label("Cantidad a comprar: "),0,1);
+		TextField text1=new TextField();
+		paisan.add(text1, 1, 1);
+		Button confirmar= new Button("Confirmar");
+		Button nel= new Button("Cancelar");
+		HBox feedear= new HBox(10);
+		feedear.getChildren().addAll(confirmar,nel);
+		paisan.add(feedear, 1, 2);
+		
+		//Compras 1era Pantalla
 
+		BorderPane lavida=new BorderPane();
+		GridPane encabezado=new GridPane();
+		encabezado.setAlignment(Pos.CENTER);
+		encabezado.setPadding(new Insets(20,20,20,10));
+		encabezado.add(new Label("Seleccione el tipo de producto"),0 , 0);
+		GridPane pie=new GridPane();
+		pie.setAlignment(Pos.CENTER);
+		pie.setPadding(new Insets(20,20,20,10));
+		Button regresarMenuTipos=new Button("Regresar");
+		pie.add(regresarMenuTipos,0 , 0);
+		HBox lol=new HBox(20);
+		lol.setAlignment(Pos.CENTER);
+		lol.setPadding(new Insets(10,10,10,10));
+		ImageView[] fotosTipo= new ImageView[4];
+		try {
+		//Imagenes carne, vegetales, tecnologia y lacteos
+		ImageView imagenvegetales = new ImageView(new Image(new FileInputStream(System.getProperty("user.dir") + "\\src\\IMAGENES\\vegetales.jpg")));
+		ImageView imagencarne = new ImageView(new Image(new FileInputStream(System.getProperty("user.dir") + "\\src\\IMAGENES\\carne.jpg")));
+		ImageView imagentecno = new ImageView(new Image(new FileInputStream(System.getProperty("user.dir") + "\\src\\IMAGENES\\tecnologia.jpg")));
+		ImageView imagenlacteos = new ImageView(new Image(new FileInputStream(System.getProperty("user.dir") + "\\src\\IMAGENES\\lacteos.jpg")));
+		imagenvegetales.setFitHeight(150);
+		imagenvegetales.setFitWidth(165);
+		fotosTipo[0]=imagenvegetales;
+		imagencarne.setFitHeight(150);
+		imagencarne.setFitWidth(165);
+		fotosTipo[1]=imagencarne;
+		imagentecno.setFitHeight(150);
+		imagentecno.setFitWidth(165);
+		fotosTipo[2]=imagentecno;
+		imagenlacteos.setFitHeight(150);
+		imagenlacteos.setFitWidth(165);
+		fotosTipo[3]=imagenlacteos;
+		}
+		catch(FileNotFoundException e) {
+			Alert info = new Alert(AlertType.ERROR);
+			info.setHeaderText("Error");
+			info.setTitle("No se pudo encontrar la imagen");
+			info.setContentText("");
+			info.show();
+		}
+		Button carnes=new Button("Carnes",fotosTipo[1]);
+		carnes.setContentDisplay(ContentDisplay.BOTTOM);
+		Button vegetales=new Button("Vegetales",fotosTipo[0]);
+		Button tecnologia=new Button("Tecnologia",fotosTipo[2]);
+		Button lacteos=new Button("Lacteos",fotosTipo[3]);
+		lacteos.setContentDisplay(ContentDisplay.BOTTOM);
+		tecnologia.setContentDisplay(ContentDisplay.BOTTOM);
+		vegetales.setContentDisplay(ContentDisplay.BOTTOM);
+		lol.getChildren().addAll(carnes,vegetales,tecnologia,lacteos);
+		lavida.setTop(encabezado);
+		lavida.setCenter(lol);
+		lavida.setBottom(pie);
+
+		// mostrar los productos disponibles del tipo elegido
+		class ComprarHandler implements EventHandler<ActionEvent>{
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				Button boton= (Button) event.getSource();
+				String text=boton.getText().substring(8);
+				for(Producto i: superm.getProducts()) {
+					if(i.getNom_producto().equals(text)) {
+						product=i;
+					}
+				}				
+				stockLabel.setText(product.getStock()+"");
+				inicial.setCenter(paisan);
+			}
+			
+		}
+		class RegresarHandler implements EventHandler<ActionEvent>{
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				primarystage.setTitle("Compra");
+				inicial.setCenter(lavida);
+			}
+		}
+		
+		//Ingresar el Banco//
+		String bancosGenericos[]= {"Bancolombia", "Banco Caja Social", "Banco de Bogota", "Davivienda", "Banco Generico 434123"};
+		ComboBox bancos= new ComboBox(FXCollections.observableArrayList(bancosGenericos));
+		bancos.setPromptText("Escoja su Banco");
+		Button confirBanco=new Button("Confirmar");
+		HBox botonesBanco=new HBox();
+		botonesBanco.setPadding(new Insets(10,10,10,10));
+		botonesBanco.getChildren().addAll(confirBanco);
+		BorderPane dominion= new BorderPane();
+		dominion.setCenter(bancos);
+		dominion.setBottom(botonesBanco);
+		
+
+		//handlers//
+		facturacion.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent inicompra) {
+				// TODO Auto-generated method stub
+				primarystage.setTitle("Compra");
+				inicial.setCenter(lavida);
+			    Random RNG2=new Random();
+			    int y=RNG2.nextInt(superm.Empleados.size());
+				compra=new Compra(cajero, null, superm.Empleados.get(y), superm);
+			}
+			
+		});
+		regresarMenuTipos.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				inicial.setCenter(menu_bienvenida);
+			}
+			
+		});
+				carnes.setOnMouseClicked(new EventHandler<MouseEvent>(){
+					//contenido carnes//
+					@Override
+					public void handle(MouseEvent event) {
+						// TODO Auto-generated method stub
+						primarystage.setTitle("Carnes");
+						if(listacarnes.isEmpty()) {
+							alerta_error.setTitle("Tipo de Producto Agotado");
+							alerta_error.setHeaderText("Se ha producido un error a la hora de verificar la existencia de este tipo de producto");
+							alerta_error.setContentText("el producto solicitado no se encuentra disponible");
+							alerta_error.show();
+						}
+						else {		
+							GridPane tft= new GridPane();
+							BorderPane lor= new BorderPane();
+							tft.setGridLinesVisible(true);
+							tft.setPadding(new Insets(10,10,10,10));
+							Label[] encabe=new Label[3];
+							encabe[0]=new Label("Nombre");
+							encabe[1]=new Label("Cantidad");
+							encabe[2]=new Label("Precio");
+							RowConstraints row1=new RowConstraints();
+							row1.setPercentHeight(10);		
+							tft.getRowConstraints().add(row1);
+							for(int i=0;i<3;i++) {
+								encabe[i].setPrefWidth(100);
+								tft.add(encabe[i], i, 0);
+								encabe[i].setAlignment(Pos.CENTER);
+							}		
+							int size=listacarnes.size();
+							for(int i=0;i<size;i++) {		
+								Carnes producto=listacarnes.get(i);
+								Button buy=new Button("comprar "+producto.getNom_producto());
+								ComprarHandler comprarh=new ComprarHandler();
+								buy.setOnAction(comprarh);
+								tft.add(buy, 4, i+1);
+								Label[] info=new Label[3];
+								info[0]=new Label(producto.getNom_producto());
+								info[1]=new Label(""+producto.getStock());
+								info[2]=new Label(producto.getPrecio()+"");
+								info[0].setPrefWidth(100);
+								info[1].setPrefWidth(100);
+								info[2].setPrefWidth(100);
+								tft.add(info[0], 0, i+1);
+								tft.add(info[1], 1, i+1);
+								tft.add(info[2], 2, i+1);
+								info[0].setAlignment(Pos.CENTER);
+								info[1].setAlignment(Pos.CENTER);
+								info[2].setAlignment(Pos.CENTER);
+								RowConstraints a= new RowConstraints();
+								a.setPercentHeight(30);
+								tft.getRowConstraints().add(a);
+							}
+							lor.setCenter(tft);
+							GridPane aram= new GridPane();
+							aram.setHgap(10);
+							aram.setAlignment(Pos.CENTER);
+							Button regresar=new Button("Regresar");
+							aram.add(regresar,0,0);
+							RegresarHandler regreh=new RegresarHandler();
+							regresar.setOnAction(regreh);
+							lor.setBottom(aram);
+							inicial.setCenter(lor);
+						}
+					}
+					
+				});
+				vegetales.setOnMouseClicked(new EventHandler<MouseEvent>(){
+					//contenido/ vegetales/
+					@Override
+					public void handle(MouseEvent event) {
+						// TODO Auto-generated method stub
+						primarystage.setTitle("Vegetales");
+						if(listavegetales.isEmpty()) {
+							alerta_error.setTitle("Tipo de Producto Agotado");
+							alerta_error.setHeaderText("Se ha producido un error a la hora de verificar la existencia de este tipo de producto");
+							alerta_error.setContentText("el producto solicitado no se encuentra disponible");
+							alerta_error.show();
+						}
+						else {		
+							GridPane tft= new GridPane();
+							BorderPane lor= new BorderPane();
+							tft.setGridLinesVisible(true);
+							tft.setPadding(new Insets(10,10,10,10));
+							Label[] encabe=new Label[3];
+							encabe[0]=new Label("Nombre");
+							encabe[1]=new Label("Cantidad");
+							encabe[2]=new Label("Precio");
+							RowConstraints row1=new RowConstraints();
+							row1.setPercentHeight(10);		
+							tft.getRowConstraints().add(row1);
+							for(int i=0;i<3;i++) {
+								encabe[i].setPrefWidth(100);
+								tft.add(encabe[i], i, 0);
+								encabe[i].setAlignment(Pos.CENTER);
+							}		
+							int size=listavegetales.size();
+							for(int i=0;i<size;i++) {	
+								Vegetales producto=listavegetales.get(i);
+								Button buy=new Button("comprar "+producto.getNom_producto());
+								ComprarHandler comprarh=new ComprarHandler();
+								buy.setOnAction(comprarh);
+								tft.add(buy, 4, i+1);
+								Label[] info=new Label[3];
+								info[0]=new Label(producto.getNom_producto());
+								info[1]=new Label(""+producto.getStock());
+								info[2]=new Label(producto.getPrecio()+"");
+								info[0].setPrefWidth(100);
+								info[1].setPrefWidth(100);
+								info[2].setPrefWidth(100);
+								tft.add(info[0], 0, i+1);
+								tft.add(info[1], 1, i+1);
+								tft.add(info[2], 2, i+1);
+								info[0].setAlignment(Pos.CENTER);
+								info[1].setAlignment(Pos.CENTER);
+								info[2].setAlignment(Pos.CENTER);
+								RowConstraints a= new RowConstraints();
+								a.setPercentHeight(30);
+								tft.getRowConstraints().add(a);
+							}
+							lor.setCenter(tft);
+							GridPane aram= new GridPane();
+							aram.setHgap(10);
+							aram.setAlignment(Pos.CENTER);
+							Button regresar=new Button("Regresar");
+							aram.add(regresar,0,0);
+							RegresarHandler regreh=new RegresarHandler();
+							regresar.setOnAction(regreh);
+							lor.setBottom(aram);
+							inicial.setCenter(lor);
+						}
+					}
+				});
+				tecnologia.setOnMouseClicked(new EventHandler<MouseEvent>(){
+					//contenido tecnologia//
+					@Override
+					public void handle(MouseEvent event) {
+						// TODO Auto-generated method stub
+						primarystage.setTitle("Tecnologia");
+						if(listatecnologia.isEmpty()) {
+							alerta_error.setTitle("Tipo de Producto Agotado");
+							alerta_error.setHeaderText("Se ha producido un error a la hora de verificar la existencia de este tipo de producto");
+							alerta_error.setContentText("el producto solicitado no se encuentra disponible");
+							alerta_error.show();
+						}
+						else {		
+							GridPane tft= new GridPane();
+							BorderPane lor= new BorderPane();
+							tft.setGridLinesVisible(true);
+							tft.setPadding(new Insets(10,10,10,10));
+							Label[] encabe=new Label[3];
+							encabe[0]=new Label("Nombre");
+							encabe[1]=new Label("Cantidad");
+							encabe[2]=new Label("Precio");
+							RowConstraints row1=new RowConstraints();
+							row1.setPercentHeight(10);		
+							tft.getRowConstraints().add(row1);
+							for(int i=0;i<3;i++) {
+								encabe[i].setPrefWidth(100);
+								tft.add(encabe[i], i, 0);
+								encabe[i].setAlignment(Pos.CENTER);
+							}		
+							int size=listatecnologia.size();
+							for(int i=0;i<size;i++) {		
+								Tecnologia producto=listatecnologia.get(i);
+								Button buy=new Button("comprar "+producto.getNom_producto());
+								ComprarHandler comprarh=new ComprarHandler();
+								buy.setOnAction(comprarh);
+								tft.add(buy, 4, i+1);
+								Label[] info=new Label[3];
+								info[0]=new Label(producto.getNom_producto());
+								info[1]=new Label(""+producto.getStock());
+								info[2]=new Label(producto.getPrecio()+"");
+								info[0].setPrefWidth(100);
+								info[1].setPrefWidth(100);
+								info[2].setPrefWidth(100);
+								tft.add(info[0], 0, i+1);
+								tft.add(info[1], 1, i+1);
+								tft.add(info[2], 2, i+1);
+								info[0].setAlignment(Pos.CENTER);
+								info[1].setAlignment(Pos.CENTER);
+								info[2].setAlignment(Pos.CENTER);
+								RowConstraints a= new RowConstraints();
+								a.setPercentHeight(30);
+								tft.getRowConstraints().add(a);
+							}
+							lor.setCenter(tft);
+							GridPane aram= new GridPane();
+							aram.setHgap(10);
+							aram.setAlignment(Pos.CENTER);
+							Button regresar=new Button("Regresar");
+							aram.add(regresar,0,0);
+							RegresarHandler regreh=new RegresarHandler();
+							regresar.setOnAction(regreh);
+							lor.setBottom(aram);
+							inicial.setCenter(lor);
+						}
+					}
+				});
+				lacteos.setOnMouseClicked(new EventHandler<MouseEvent>(){
+					//contenido lacteos//
+					@Override
+					public void handle(MouseEvent event) {
+						// TODO Auto-generated method stub
+						primarystage.setTitle("Lacteos");
+						if(listalacteos.isEmpty()) {
+							alerta_error.setTitle("Tipo de Producto Agotado");
+							alerta_error.setHeaderText("Se ha producido un error a la hora de verificar la existencia de este tipo de producto");
+							alerta_error.setContentText("el producto solicitado no se encuentra disponible");
+							alerta_error.show();
+						}
+						else {		
+							GridPane tft= new GridPane();
+							BorderPane lor= new BorderPane();
+							tft.setGridLinesVisible(true);
+							tft.setPadding(new Insets(10,10,10,10));
+							Label[] encabe=new Label[3];
+							encabe[0]=new Label("Nombre");
+							encabe[1]=new Label("Cantidad");
+							encabe[2]=new Label("Precio");
+							RowConstraints row1=new RowConstraints();
+							row1.setPercentHeight(10);		
+							tft.getRowConstraints().add(row1);
+							for(int i=0;i<3;i++) {
+								encabe[i].setPrefWidth(100);
+								tft.add(encabe[i], i, 0);
+								encabe[i].setAlignment(Pos.CENTER);
+							}		
+							int size=listalacteos.size();
+							for(int i=0;i<size;i++) {		
+								Lacteos producto=listalacteos.get(i);
+								Button buy=new Button("comprar "+producto.getNom_producto());
+								ComprarHandler comprarh=new ComprarHandler();
+								buy.setOnAction(comprarh);
+								tft.add(buy, 4, i+1);
+								Label[] info=new Label[3];
+								info[0]=new Label(producto.getNom_producto());
+								info[1]=new Label(""+producto.getStock());
+								info[2]=new Label(producto.getPrecio()+"");
+								info[0].setPrefWidth(100);
+								info[1].setPrefWidth(100);
+								info[2].setPrefWidth(100);
+								tft.add(info[0], 0, i+1);
+								tft.add(info[1], 1, i+1);
+								tft.add(info[2], 2, i+1);
+								info[0].setAlignment(Pos.CENTER);
+								info[1].setAlignment(Pos.CENTER);
+								info[2].setAlignment(Pos.CENTER);
+								RowConstraints a= new RowConstraints();
+								a.setPercentHeight(30);
+								tft.getRowConstraints().add(a);
+							}
+							lor.setCenter(tft);
+							GridPane aram= new GridPane();
+							aram.setHgap(10);
+							aram.setAlignment(Pos.CENTER);
+							Button regresar=new Button("Regresar");
+							aram.add(regresar,0,0);
+							RegresarHandler regreh=new RegresarHandler();
+							regresar.setOnAction(regreh);
+							lor.setBottom(aram);
+							inicial.setCenter(lor);
+						}
+					}
+				});
+				nel.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+					@Override
+					public void handle(MouseEvent event) {
+						// TODO Auto-generated method stub
+						text1.clear();
+						inicial.setCenter(lavida);
+					}
+				});
+				EventHandler<ActionEvent> ev1= new EventHandler<ActionEvent>() {
+
+					@Override
+					public void handle(ActionEvent f) {
+						// TODO Auto-generated method stub
+						int cantCompra= Integer.valueOf(text1.getText());						
+						compra.agregar(product, cantCompra, superm);
+						Alert a = new Alert(AlertType.CONFIRMATION,"Su compra ha sido procesada, desea continuar comprando?"
+								,ButtonType.YES,ButtonType.NO);
+						a.setTitle("Confirmar Compra");
+						a.setHeaderText("Su compra ha sido procesada, desea continuar comprando?");
+						a.show();
+						text1.clear();
+						a.setOnCloseRequest(new EventHandler<DialogEvent>() {
+
+							@Override
+							public void handle(DialogEvent no) {
+								// TODO Auto-generated method stub
+								if(a.getResult().equals(ButtonType.YES)) {
+									inicial.setCenter(lavida);
+								}
+								else{
+									inicial.setCenter(dominion);
+								};
+							}
+							
+						});;
+					}
+					
+				};
+				confirmar.setOnAction(ev1);
+				confirBanco.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+					@Override
+					public void handle(MouseEvent event) {
+						// TODO Auto-generated method stub
+						String bancoSelec=(String) bancos.getValue();
+						factura=compra.efectuarCompra(bancoSelec);
+						compra.setFact(factura);						
+						Alert a = new Alert(AlertType.CONFIRMATION,"Compra realizada, tiene alguna queja respecto al servicio?"
+								,ButtonType.YES,ButtonType.NO);
+						a.setTitle("Reclamos");
+						a.show();
+						a.setOnCloseRequest(new EventHandler<DialogEvent>() {
+
+							@Override
+							public void handle(DialogEvent no) {
+								// TODO Auto-generated method stub
+								if(a.getResult().equals(ButtonType.YES)) {
+								}
+								else{
+									alerta_informacion.setTitle("Factura");
+									alerta_informacion.setHeaderText("La informacion de su factura es:");
+									alerta_informacion.setContentText(factura.toString());
+									alerta_informacion.show();
+									alerta_informacion.setOnCloseRequest(new EventHandler<DialogEvent>() {
+
+										@Override
+										public void handle(DialogEvent event) {
+											// TODO Auto-generated method stub
+											inicial.setCenter(menu_bienvenida);
+										}
+
+									});
+								};
+							}
+							
+						});
+					}
+
+					});
+									
+				
+}
+
+	
 public static void main(String[] args) {
 	Lector.Leer();
    launch(args);

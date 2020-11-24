@@ -11,6 +11,12 @@ public abstract class Producto implements Serializable {
 	public int stock;
 	public String tipo_producto;
 
+	public int getStock() {
+		return stock;
+	}
+	public void setStock(int stock) {
+		this.stock = stock;
+	}
 	public Producto(String id_producto, int precio, String nom_producto, int stock, String tipo_producto) {
 		this.id_producto = id_producto;
 		this.precio = precio;
