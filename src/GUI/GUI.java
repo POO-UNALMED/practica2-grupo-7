@@ -441,8 +441,13 @@ public class GUI extends Application{
 		MenuItem mas_quejas = new MenuItem("Siguiente despido");
 		MenuItem producto_mas_menos = new MenuItem("Producto mas y menos vendido");
 		MenuItem salario = new MenuItem("Salarios");
-		MenuItem agregar_producto = new MenuItem("Agregar producto");
+		Menu agregar_producto = new Menu("Agregar producto");
 		MenuItem acerca_de = new MenuItem("Acerca de");
+		MenuItem Carnicos = new MenuItem("Carnicos");
+		MenuItem Lacteos = new MenuItem("Lacteos");
+		MenuItem Vegetales = new MenuItem("Vegetales");
+		MenuItem Tecnologia = new MenuItem("Tecnologia");
+		agregar_producto.getItems().addAll(Carnicos,Lacteos,Vegetales,Tecnologia);
 		archivo.getItems().addAll(usuario,salir);
 		procesos_consultas.getItems().addAll(facturacion,mas_facturas,mas_quejas,producto_mas_menos,salario,agregar_producto);
 		ayuda.getItems().addAll(acerca_de);
