@@ -173,11 +173,7 @@ public class GUI extends Application{
 		hojaVida[1] = new Label("Santiago Herrera\n Ocupacion: Estudiante\n Aspiraciones: Acabar este semestre, luego ya se vera \n Esperanza: Que el profe nos ponga 5 x2");
 		hojaVida[1].setPrefWidth(200);
 		hojaVida[1].setWrapText(true);
-<<<<<<< HEAD
-		hojaVida[2] = new Label("Andres Bañol\n Ocupacion: Estudiante\n Aspiraciones: Ser un gamedev profesional \n Esperanza: Que el profe nos ponga 5 x3");
-=======
 		hojaVida[2] = new Label("Andres Bañol \n Ocupacion: Estudiante \n Aspiraciones: n/a \n Esperanza: Ganar el ultimo parcial de ecuaciones y calculo");
->>>>>>> 49de82eb5bb156bdae1efde32e5f2e82f0d2b4e4
 		hojaVida[2].setPrefWidth(200);
 		hojaVida[2].setWrapText(true);
 		HBox p5=new HBox(hojaVida[0]);
