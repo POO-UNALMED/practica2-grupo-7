@@ -1,6 +1,13 @@
 package gestorAplicacion.exceptions;
 
-public class compraSuperiorAStock extends ErrorAplicacion{
+import java.io.Serializable;
+
+public class compraSuperiorAStock extends ErrorAplicacion implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public compraSuperiorAStock() {
 		super("wey no");
 	}

@@ -42,13 +42,13 @@ import gestorAplicacion.productos.*;
 import gestorAplicacion.exceptions.*;
 import gestorAplicacion.personas.*;
 import BaseDatos.*;
+//A
 public class GUI extends Application{
 	public static int hojaActual;
 	public static int Opcionsuper=0;
 	public int r;
 	Random RNG=new Random();
 	private static Producto product;
-	private static Label stockLabel=new Label("");
 	Compra compra;
 	Factura factura;
 	Supermercado superm=null;
@@ -59,8 +59,6 @@ public class GUI extends Application{
 	ArrayList<Tecnologia>listatecnologia=new ArrayList<Tecnologia>();
 	Usuario cajero=null;
 	public void start(Stage primarystage) {
-		
-		
 		//P3
 		Label saludo=new Label("Bienvenido a nuestro programa");
 		HBox p3= new HBox(saludo);
@@ -70,7 +68,6 @@ public class GUI extends Application{
 		saludo.setPrefWidth(125);
 		saludo.setWrapText(true);
 		ImageView[] Wimg = new ImageView[5];
-		
 		
 		//P4
 		try {
@@ -600,6 +597,7 @@ public class GUI extends Application{
 				}
 			}
 		});
+		//a
 		producto_mas_menos.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event){
 				try {
@@ -632,6 +630,7 @@ public class GUI extends Application{
 				}
 				}
 		});
+		//a
 		salario.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event){
 				String salarios="";
@@ -653,6 +652,7 @@ public class GUI extends Application{
 			}
 		});
 		//ingresar la cantidad a comprar//
+		Label stockLabel=new Label("");
 		GridPane paisan= new GridPane();
 		paisan.setAlignment(Pos.CENTER);
 		paisan.setVgap(10); 
@@ -767,7 +767,6 @@ public class GUI extends Application{
 
 			@Override
 			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
 				Button boton= (Button) event.getSource();
 				String text=boton.getText().substring(8);
 				for(Producto i: superm.getProducts()) {
@@ -783,7 +782,6 @@ public class GUI extends Application{
 		class RegresarHandler implements EventHandler<ActionEvent>{
 			@Override
 			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
 				primarystage.setTitle("Compra");
 				inicial.setCenter(lavida);
 			}
@@ -791,7 +789,7 @@ public class GUI extends Application{
 		
 		//Ingresar el Banco//
 		String bancosGenericos[]= {"Bancolombia", "Banco Caja Social", "Banco de Bogota", "Davivienda", "Banco Generico 434123"};
-		ComboBox bancos= new ComboBox(FXCollections.observableArrayList(bancosGenericos));
+		ComboBox<String> bancos= new ComboBox<String>(FXCollections.observableArrayList(bancosGenericos));
 		bancos.setPromptText("Escoja su Banco");
 		Button confirBanco=new Button("Confirmar");
 		HBox botonesBanco=new HBox();
@@ -807,7 +805,6 @@ public class GUI extends Application{
 
 			@Override
 			public void handle(ActionEvent inicompra) {
-				// TODO Auto-generated method stub
 				primarystage.setTitle("Compra");
 				inicial.setCenter(lavida);
 			    Random RNG2=new Random();
@@ -820,7 +817,6 @@ public class GUI extends Application{
 
 			@Override
 			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
 				inicial.setCenter(menu_bienvenida);
 			}
 			
@@ -829,7 +825,6 @@ public class GUI extends Application{
 					//contenido carnes//
 					@Override
 					public void handle(MouseEvent event) {
-						// TODO Auto-generated method stub
 						primarystage.setTitle("Carnes");
 						if(listacarnes.isEmpty()) {
 							alerta_error.setTitle("Tipo de Producto Agotado");
@@ -896,7 +891,6 @@ public class GUI extends Application{
 					//contenido/ vegetales/
 					@Override
 					public void handle(MouseEvent event) {
-						// TODO Auto-generated method stub
 						primarystage.setTitle("Vegetales");
 						if(listavegetales.isEmpty()) {
 							alerta_error.setTitle("Tipo de Producto Agotado");
@@ -962,7 +956,6 @@ public class GUI extends Application{
 					//contenido tecnologia//
 					@Override
 					public void handle(MouseEvent event) {
-						// TODO Auto-generated method stub
 						primarystage.setTitle("Tecnologia");
 						if(listatecnologia.isEmpty()) {
 							alerta_error.setTitle("Tipo de Producto Agotado");
@@ -1028,7 +1021,6 @@ public class GUI extends Application{
 					//contenido lacteos//
 					@Override
 					public void handle(MouseEvent event) {
-						// TODO Auto-generated method stub
 						primarystage.setTitle("Lacteos");
 						if(listalacteos.isEmpty()) {
 							alerta_error.setTitle("Tipo de Producto Agotado");
@@ -1094,7 +1086,6 @@ public class GUI extends Application{
 
 					@Override
 					public void handle(MouseEvent event) {
-						// TODO Auto-generated method stub
 						text1.clear();
 						inicial.setCenter(lavida);
 					}
@@ -1104,7 +1095,6 @@ public class GUI extends Application{
 					@Override
 					public void handle(ActionEvent f) {
 						try {
-						// TODO Auto-generated method stub
 						int cantCompra= Integer.valueOf(text1.getText());
 						compra.agregar(product, cantCompra, superm);
 						Alert a = new Alert(AlertType.CONFIRMATION,"Su compra ha sido procesada, desea continuar comprando?"
@@ -1117,7 +1107,6 @@ public class GUI extends Application{
 
 							@Override
 							public void handle(DialogEvent no) {
-								// TODO Auto-generated method stub
 								if(a.getResult().equals(ButtonType.YES)) {
 									inicial.setCenter(lavida);
 								}
@@ -1130,7 +1119,6 @@ public class GUI extends Application{
 					
 						}
 					 catch (compraSuperiorAStock e) {
-						// TODO Auto-generated catch block
 						alerta_error.setTitle("Error de Compra");
 						alerta_error.setHeaderText("Se ha producido un error a la hora de verificar la existencia de este producto");
 						alerta_error.setContentText("el producto solicitado no tiene suficiente stock disponible");
@@ -1145,7 +1133,6 @@ public class GUI extends Application{
 
 					@Override
 					public void handle(MouseEvent event) {
-						// TODO Auto-generated method stub
 						try {
 						String bancoSelec=(String) bancos.getValue();
 						if(bancoSelec!=null) {
@@ -1159,7 +1146,6 @@ public class GUI extends Application{
 
 							@Override
 							public void handle(DialogEvent no) {
-								// TODO Auto-generated method stub
 								if(a.getResult().equals(ButtonType.YES)) {
 									//El usuario decidio quejarse
 									inicial.setCenter(g);
@@ -1176,7 +1162,6 @@ public class GUI extends Application{
 
 												@Override
 												public void handle(DialogEvent q) {
-													// TODO Auto-generated method stub
 													//mostrar la factura generada
 													Alert alerta_informacion2=new Alert(AlertType.INFORMATION);
 													alerta_informacion2.setResizable(true);
@@ -1188,7 +1173,6 @@ public class GUI extends Application{
 
 														@Override
 														public void handle(DialogEvent event) {
-															// TODO Auto-generated method stub
 															//volver al menu principal
 															Lector.Escribir();
 															primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
@@ -1218,7 +1202,6 @@ public class GUI extends Application{
 
 										@Override
 										public void handle(DialogEvent event) {
-											// TODO Auto-generated method stub
 											//volver al menu principal
 											Lector.Escribir();
 											primarystage.setTitle("Usuario: "+cajero.getNombre()+".");
@@ -1284,7 +1267,6 @@ public class GUI extends Application{
 
 													@Override
 													public void handle(DialogEvent event) {
-														// TODO Auto-generated method stub
 														//Volver al menu principal
 														Lector.Escribir();
 														addprodl.ClearFields();
@@ -1307,7 +1289,6 @@ public class GUI extends Application{
 
 												@Override
 												public void handle(DialogEvent event) {
-													// TODO Auto-generated method stub
 													//Volver al menu principal
 													Lector.Escribir();
 													addprodl.ClearFields();
@@ -1377,7 +1358,6 @@ public class GUI extends Application{
 
 													@Override
 													public void handle(DialogEvent event) {
-														// TODO Auto-generated method stub
 														//Volver al menu principal
 														Lector.Escribir();
 														addprod.ClearFields();
@@ -1400,7 +1380,6 @@ public class GUI extends Application{
 
 												@Override
 												public void handle(DialogEvent event) {
-													// TODO Auto-generated method stub
 													//Volver al menu principal
 													Lector.Escribir();
 													addprod.ClearFields();
@@ -1464,7 +1443,6 @@ public class GUI extends Application{
 
 											@Override
 											public void handle(DialogEvent event) {
-												// TODO Auto-generated method stub
 												//volver al menu principal
 												Lector.Escribir();
 												addprodv.ClearFields();
@@ -1487,7 +1465,6 @@ public class GUI extends Application{
 
 										@Override
 										public void handle(DialogEvent event) {
-											// TODO Auto-generated method stub
 											//Volver al menu principal
 											Lector.Escribir();
 											addprodv.ClearFields();
@@ -1554,7 +1531,6 @@ public class GUI extends Application{
 
 											@Override
 											public void handle(DialogEvent event) {
-												// TODO Auto-generated method stub
 												//Volver al menu principal
 												Lector.Escribir();
 												addprodt.ClearFields();
@@ -1577,7 +1553,6 @@ public class GUI extends Application{
 
 										@Override
 										public void handle(DialogEvent event) {
-											// TODO Auto-generated method stub
 											//Volver al menu principal
 											Lector.Escribir();
 											addprodt.ClearFields();

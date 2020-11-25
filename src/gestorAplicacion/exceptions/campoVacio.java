@@ -1,6 +1,13 @@
 package gestorAplicacion.exceptions;
 
-public class campoVacio extends ErrorAplicacion{
+import java.io.Serializable; 
+
+public class campoVacio extends ErrorAplicacion implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public campoVacio() {
 		super("holi");
 	}
